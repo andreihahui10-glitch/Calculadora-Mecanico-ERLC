@@ -1,19 +1,16 @@
 const servicios = {
-  // Reparaciones
   reparaciones: [
     { nombre: 'Reparación de motor', precio: 800 },
     { nombre: 'Cambio de neumáticos', precio: 300 },
     { nombre: 'Reparación de carrocería', precio: 450 },
     { nombre: 'Cambio de cristal/luna', precio: 250 }
   ],
-  // Modificaciones
   modificaciones: [
     { nombre: 'Pintura personalizada', precio: 500 },
     { nombre: 'Aumento de rendimiento (Turbo)', precio: 2500 },
     { nombre: 'Kit de carrocería (Bodykit)', precio: 1800 },
     { nombre: 'Luces Neón / Tintado', precio: 600 }
   ],
-  // Mantenimiento
   mantenimiento: [
     { nombre: 'Cambio de aceite', precio: 150 },
     { nombre: 'Revisión y frenos', precio: 350 },
@@ -31,10 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnLimpiar = document.querySelectorAll('button')[1];
 
   function actualizarServicios() {
-    // Convierte el valor a minúsculas para evitar fallos de coincidencia
     const val = (selectCategoria.value || '').toLowerCase().trim();
     
-    // Busca la lista correspondiente o usa 'reparaciones' por defecto
     let lista = servicios[val];
     if (!lista) {
       const claves = Object.keys(servicios);
@@ -58,12 +53,20 @@ document.addEventListener('DOMContentLoaded', () => {
       total += item.precio * item.cantidad;
     });
 
-    const elementoTotal = Array.from(document.querySelectorAll('*')).find(
-      el => el.textContent.includes('TOTAL') || el.textContent.includes('$')
-    );
-    
-    if (elementoTotal) {
-      elementoTotal.innerHTML = `TOTAL <strong>$${total}</strong>`;
+    // Busca un elemento span o p específico o el contenedor del total sin borrar el HTML
+    const contenedorTotal = document.querySelector('.panel:last-child p') || 
+                            document.querySelector('.panel:last-child h2') ||
+                            document.querySelector('.panel:last-child');
+
+    if (contenedorTotal) {
+      // Si existe un elemento con el monto actual, actualizamos solo el número
+      const spanPrecio = contenedorTotal.querySelector('span, strong');
+      if (spanPrecio) {
+        spanPrecio.textContent = `$${total}`;
+      } else {
+        // En caso de no tener etiquetas internas, actualiza el contenido directamente
+        contenedorTotal.innerHTML = `TOTAL <strong>$${total}</strong>`;
+      }
     }
   }
 
@@ -87,7 +90,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   selectCategoria.addEventListener('change', actualizarServicios);
-  
-  // Forzar carga inicial
   actualizarServicios();
 });
