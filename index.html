@@ -4,7 +4,63 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MECÁNICO ER:LC</title>
-  <link rel="stylesheet" href="style.css?v=100">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header { text-align: center; margin-bottom: 25px; }
+    header h1 { color: #2563eb; margin: 0; font-size: 2rem; font-weight: 800; }
+    header p { margin: 5px 0 0; color: #64748b; font-size: 0.95rem; }
+    main { max-width: 650px; width: 100%; display: flex; flex-direction: column; gap: 20px; }
+    .panel {
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e2e8f0;
+    }
+    .panel h2 { margin-top: 0; margin-bottom: 18px; font-size: 1.15rem; color: #0f172a; }
+    .form-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px; }
+    .field { display: flex; flex-direction: column; }
+    .field label { font-size: 0.85rem; color: #475569; margin-bottom: 4px; }
+    select, input {
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      background-color: #fff;
+    }
+    .btn {
+      padding: 8px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background-color: #f1f5f9;
+      color: #1e293b;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn:hover { background-color: #e2e8f0; }
+    .lista { margin-bottom: 15px; min-height: 25px; }
+    .lista p.vacio { color: #64748b; margin: 0; font-size: 0.95rem; }
+    .item-linea {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px dotted #e2e8f0;
+      font-size: 0.95rem;
+    }
+    .total-text { font-size: 1rem; margin: 15px 0; color: #0f172a; }
+    footer { text-align: center; color: #94a3b8; font-size: 0.85rem; margin-top: 40px; }
+  </style>
 </head>
 <body>
   <header>
@@ -35,7 +91,7 @@
           <input type="number" id="cantidad" value="1" min="1">
         </div>
 
-        <button id="btn-add" class="btn btn-add">➕ AÑADIR AL PRESUPUESTO</button>
+        <button id="btn-add" class="btn">➕ AÑADIR AL PRESUPUESTO</button>
       </div>
     </div>
 
@@ -47,7 +103,7 @@
 
       <p class="total-text">TOTAL <strong id="total-val">$0</strong></p>
       
-      <button id="btn-clear" class="btn btn-clear">🗑️ LIMPIAR PRESUPUESTO</button>
+      <button id="btn-clear" class="btn">🗑️ LIMPIAR PRESUPUESTO</button>
     </div>
   </main>
 
@@ -55,6 +111,97 @@
     <p>Calculadora del Mecánico · ER:LC</p>
   </footer>
 
-  <script src="script.js?v=100"></script>
+  <script>
+    const servicios = {
+      reparaciones: [
+        { nombre: 'Reparación de motor', precio: 800 },
+        { nombre: 'Cambio de neumáticos', precio: 300 },
+        { nombre: 'Reparación de carrocería', precio: 450 },
+        { nombre: 'Cambio de cristal/luna', precio: 250 }
+      ],
+      modificaciones: [
+        { nombre: 'Pintura personalizada', precio: 500 },
+        { nombre: 'Aumento de rendimiento (Turbo)', precio: 2500 },
+        { nombre: 'Kit de carrocería (Bodykit)', precio: 1800 },
+        { nombre: 'Luces Neón / Tintado', precio: 600 }
+      ],
+      mantenimiento: [
+        { nombre: 'Cambio de aceite', precio: 150 },
+        { nombre: 'Revisión y frenos', precio: 350 },
+        { nombre: 'Recarga de nitrógeno / Nitro', precio: 1000 }
+      ]
+    };
+
+    let listaPresupuesto = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const selectCat = document.getElementById('categoria');
+      const selectServ = document.getElementById('servicio');
+      const inputCant = document.getElementById('cantidad');
+      const btnAdd = document.getElementById('btn-add');
+      const btnClear = document.getElementById('btn-clear');
+      const divLista = document.getElementById('lista-servicios');
+      const spanTotal = document.getElementById('total-val');
+
+      function cargarServicios() {
+        const cat = selectCat.value;
+        const items = servicios[cat] || [];
+        selectServ.innerHTML = '';
+
+        items.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s.nombre;
+          opt.textContent = `${s.nombre} - $${s.precio}`;
+          opt.dataset.precio = s.precio;
+          selectServ.appendChild(opt);
+        });
+      }
+
+      function render() {
+        divLista.innerHTML = '';
+        let total = 0;
+
+        if (listaPresupuesto.length === 0) {
+          divLista.innerHTML = '<p class="vacio">No hay servicios añadidos.</p>';
+          spanTotal.textContent = '$0';
+          return;
+        }
+
+        listaPresupuesto.forEach(item => {
+          const sub = item.precio * item.cantidad;
+          total += sub;
+
+          const row = document.createElement('div');
+          row.className = 'item-linea';
+          row.innerHTML = `<span>${item.cantidad}x ${item.nombre}</span><strong>$${sub}</strong>`;
+          divLista.appendChild(row);
+        });
+
+        spanTotal.textContent = `$${total}`;
+      }
+
+      btnAdd.addEventListener('click', (e) => {
+        e.preventDefault();
+        const opt = selectServ.options[selectServ.selectedIndex];
+        if (!opt) return;
+
+        const nombre = opt.value;
+        const precio = parseFloat(opt.dataset.precio);
+        const cantidad = parseInt(inputCant.value) || 1;
+
+        listaPresupuesto.push({ nombre, precio, cantidad });
+        render();
+      });
+
+      btnClear.addEventListener('click', (e) => {
+        e.preventDefault();
+        listaPresupuesto = [];
+        render();
+      });
+
+      selectCat.addEventListener('change', cargarServicios);
+      cargarServicios();
+    });
+  </script>
 </body>
 </html>
