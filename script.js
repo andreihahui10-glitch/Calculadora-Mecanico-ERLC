@@ -18,75 +18,73 @@ const servicios = {
   ]
 };
 
-let presupuesto = [];
+let listaPresupuesto = [];
 
 document.addEventListener('DOMContentLoaded', () => {
-  const selectCategoria = document.getElementById('select-categoria');
-  const selectServicio = document.getElementById('select-servicio');
-  const inputCantidad = document.getElementById('input-cantidad');
-  const formServicio = document.getElementById('form-servicio');
-  const listaPresupuesto = document.getElementById('lista-presupuesto');
-  const totalMonto = document.getElementById('total-monto');
-  const btnLimpiar = document.getElementById('btn-limpiar');
+  const selectCat = document.getElementById('categoria');
+  const selectServ = document.getElementById('servicio');
+  const inputCant = document.getElementById('cantidad');
+  const btnAdd = document.getElementById('btn-add');
+  const btnClear = document.getElementById('btn-clear');
+  const divLista = document.getElementById('lista-servicios');
+  const spanTotal = document.getElementById('total-val');
 
-  function actualizarServicios() {
-    const cat = selectCategoria.value;
-    const lista = servicios[cat] || [];
-    selectServicio.innerHTML = '';
+  function cargarServicios() {
+    const cat = selectCat.value;
+    const items = servicios[cat] || [];
+    selectServ.innerHTML = '';
 
-    lista.forEach(s => {
-      const option = document.createElement('option');
-      option.value = s.nombre;
-      option.textContent = `${s.nombre} ($${s.precio})`;
-      option.dataset.precio = s.precio;
-      selectServicio.appendChild(option);
+    items.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s.nombre;
+      opt.textContent = `${s.nombre} - $${s.precio}`;
+      opt.dataset.precio = s.precio;
+      selectServ.appendChild(opt);
     });
   }
 
-  function renderizarPresupuesto() {
-    listaPresupuesto.innerHTML = '';
+  function render() {
+    divLista.innerHTML = '';
     let total = 0;
 
-    if (presupuesto.length === 0) {
-      listaPresupuesto.innerHTML = '<p class="vacio">No hay servicios añadidos aún.</p>';
-      totalMonto.textContent = '$0';
+    if (listaPresupuesto.length === 0) {
+      divLista.innerHTML = '<p class="vacio">No hay servicios añadidos.</p>';
+      spanTotal.textContent = '$0';
       return;
     }
 
-    presupuesto.forEach((item) => {
-      const subtotal = item.precio * item.cantidad;
-      total += subtotal;
+    listaPresupuesto.forEach(item => {
+      const sub = item.precio * item.cantidad;
+      total += sub;
 
-      const div = document.createElement('div');
-      div.className = 'item-row';
-      div.innerHTML = `
-        <span>${item.cantidad}x ${item.nombre}</span>
-        <strong>$${subtotal}</strong>
-      `;
-      listaPresupuesto.appendChild(div);
+      const row = document.createElement('div');
+      row.className = 'item-linea';
+      row.innerHTML = `<span>${item.cantidad}x ${item.nombre}</span><strong>$${sub}</strong>`;
+      divLista.appendChild(row);
     });
 
-    totalMonto.textContent = `$${total}`;
+    spanTotal.textContent = `$${total}`;
   }
 
-  formServicio.addEventListener('submit', (e) => {
+  btnAdd.addEventListener('click', (e) => {
     e.preventDefault();
-    const optionSelected = selectServicio.options[selectServicio.selectedIndex];
-    if (!optionSelected) return;
+    const opt = selectServ.options[selectServ.selectedIndex];
+    if (!opt) return;
 
-    const nombre = optionSelected.value;
-    const precio = parseFloat(optionSelected.dataset.precio);
-    const cantidad = parseInt(inputCantidad.value) || 1;
+    const nombre = opt.value;
+    const precio = parseFloat(opt.dataset.precio);
+    const cantidad = parseInt(inputCant.value) || 1;
 
-    presupuesto.push({ nombre, precio, cantidad });
-    renderizarPresupuesto();
+    listaPresupuesto.push({ nombre, precio, cantidad });
+    render();
   });
 
-  btnLimpiar.addEventListener('click', () => {
-    presupuesto = [];
-    renderizarPresupuesto();
+  btnClear.addEventListener('click', (e) => {
+    e.preventDefault();
+    listaPresupuesto = [];
+    render();
   });
 
-  selectCategoria.addEventListener('change', actualizarServicios);
-  actualizarServicios();
+  selectCat.addEventListener('change', cargarServicios);
+  cargarServicios();
 });
