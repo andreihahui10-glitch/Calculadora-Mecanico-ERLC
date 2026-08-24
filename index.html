@@ -3,60 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora Mecánico ER:LC</title>
+  <title>MECÁNICO ER:LC</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>🛠️ MECÁNICO ER:LC</h1>
-      <p>Calculadora de Presupuestos Taller</p>
-    </header>
+  <header>
+    <h1>🔧 MECÁNICO ER:LC</h1>
+    <p>Calculadora de presupuesto</p>
+  </header>
 
-    <div class="app-grid">
-      <!-- Formulario para añadir -->
-      <div class="card">
-        <h2>Añadir Servicio</h2>
-        <form id="form-servicio">
-          <div class="form-group">
-            <label>Categoría</label>
-            <select id="select-categoria">
-              <option value="reparaciones">Reparaciones</option>
-              <option value="modificaciones">Modificaciones</option>
-              <option value="mantenimiento">Mantenimiento</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Servicio</label>
-            <select id="select-servicio"></select>
-          </div>
-
-          <div class="form-group">
-            <label>Cantidad</label>
-            <input type="number" id="input-cantidad" value="1" min="1">
-          </div>
-
-          <button type="submit" class="btn btn-primary">+ AÑADIR AL PRESUPUESTO</button>
-        </form>
-      </div>
-
-      <!-- Presupuesto / Recibo -->
-      <div class="card">
-        <h2>📋 Presupuesto</h2>
-        <div id="lista-presupuesto" class="lista-items">
-          <p class="vacio">No hay servicios añadidos aún.</p>
+  <main>
+    <!-- Panel Añadir servicio -->
+    <div class="panel">
+      <h2>🛠️ Añadir servicio</h2>
+      <div class="form-row">
+        <div class="field">
+          <label>Categoría</label>
+          <select id="categoria">
+            <option value="reparaciones">Reparaciones</option>
+            <option value="modificaciones">Modificaciones</option>
+            <option value="mantenimiento">Mantenimiento</option>
+          </select>
         </div>
 
-        <div class="total-box">
-          <span>TOTAL:</span>
-          <span id="total-monto">$0</span>
+        <div class="field">
+          <label>Servicio</label>
+          <select id="servicio"></select>
         </div>
 
-        <button id="btn-limpiar" class="btn btn-danger">🗑️ LIMPIAR PRESUPUESTO</button>
+        <div class="field">
+          <label>Cantidad</label>
+          <input type="number" id="cantidad" value="1" min="1">
+        </div>
+
+        <button id="btn-add" class="btn btn-add">➕ AÑADIR AL PRESUPUESTO</button>
       </div>
     </div>
-  </div>
+
+    <!-- Panel Presupuesto -->
+    <div class="panel">
+      <h2>📋 Presupuesto</h2>
+      <div id="lista-servicios" class="lista">
+        <p class="vacio">No hay servicios añadidos.</p>
+      </div>
+
+      <p class="total-text">TOTAL <strong id="total-val">$0</strong></p>
+      
+      <button id="btn-clear" class="btn btn-clear">🗑️ LIMPIAR PRESUPUESTO</button>
+    </div>
+  </main>
+
+  <footer>
+    <p>Calculadora del Mecánico · ER:LC</p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
