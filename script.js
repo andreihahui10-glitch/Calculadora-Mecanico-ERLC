@@ -1,17 +1,21 @@
+// Servicios y precios realistas para ER:LC
 const servicios = {
   Reparaciones: [
-    { nombre: 'Reparación de motor', precio: 500 },
-    { nombre: 'Cambio de ruedas', precio: 200 },
-    { nombre: 'Reparación de carrocería', precio: 350 }
+    { nombre: 'Reparación de motor', precio: 800 },
+    { nombre: 'Cambio de neumáticos', precio: 300 },
+    { nombre: 'Reparación de carrocería', precio: 450 },
+    { nombre: 'Cambio de cristal/luna', precio: 250 }
   ],
   Modificaciones: [
-    { nombre: 'Pintura personalizada', precio: 600 },
-    { nombre: 'Aumento de velocidad (Turbo)', precio: 1200 },
-    { nombre: 'Luces Neón', precio: 400 }
+    { nombre: 'Pintura personalizada', precio: 500 },
+    { nombre: 'Aumento de rendimiento (Turbo)', precio: 2500 },
+    { nombre: 'Kit de carrocería (Bodykit)', precio: 1800 },
+    { nombre: 'Luces Neón / Tintado de cristales', precio: 600 }
   ],
   Mantenimiento: [
     { nombre: 'Cambio de aceite', precio: 150 },
-    { nombre: 'Revisión general', precio: 250 }
+    { nombre: 'Revisión y frenos', precio: 350 },
+    { nombre: 'Recarga de nitrógeno / Nitro', precio: 1000 }
   ]
 };
 
@@ -28,38 +32,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const cat = selectCategoria.value;
     selectServicio.innerHTML = '';
     
-    if (servicios[cat]) {
-      servicios[cat].forEach(s => {
+    // Asocia por clave o por índice si el HTML usa nombres distintos
+    const opcionesCategoria = Object.keys(servicios);
+    const categoriaSeleccionada = servicios[cat] ? cat : opcionesCategoria[selectCategoria.selectedIndex] || 'Reparaciones';
+    
+    if (servicios[categoriaSeleccionada]) {
+      servicios[categoriaSeleccionada].forEach(s => {
         const option = document.createElement('option');
         option.value = s.nombre;
-        option.textContent = `${s.nombre} ($${s.precio})`;
+        option.textContent = `${s.nombre} (€${s.precio})`;
         selectServicio.appendChild(option);
       });
     }
   }
 
   function renderizarPresupuesto() {
-    const totalElemento = document.querySelector('.panel:nth-child(2) h2') || document.body;
     let total = 0;
-
     presupuesto.forEach(item => {
       total += item.precio * item.cantidad;
     });
 
-    // Actualiza el texto del total en pantalla
-    const elementoTotal = Array.from(document.querySelectorAll('*')).find(el => el.textContent.includes('TOTAL'));
+    const elementoTotal = Array.from(document.querySelectorAll('*')).find(el => el.textContent.includes('TOTAL') || el.textContent.includes('$'));
     if (elementoTotal) {
-      elementoTotal.innerHTML = `TOTAL <strong>$${total}</strong>`;
+      elementoTotal.innerHTML = `TOTAL <strong>€${total}</strong>`;
     }
   }
 
   btnAñadir.addEventListener('click', (e) => {
     e.preventDefault();
-    const cat = selectCategoria.value;
+    const catIndex = selectCategoria.selectedIndex;
+    const catNombre = Object.keys(servicios)[catIndex] || selectCategoria.value;
     const nombreServicio = selectServicio.value;
     const cantidad = parseInt(inputCantidad.value) || 1;
 
-    const servicioEncontrado = servicios[cat]?.find(s => s.nombre === nombreServicio);
+    const listaActual = servicios[catNombre] || servicios[selectCategoria.value];
+    const servicioEncontrado = listaActual?.find(s => s.nombre === nombreServicio);
     
     if (servicioEncontrado) {
       presupuesto.push({
