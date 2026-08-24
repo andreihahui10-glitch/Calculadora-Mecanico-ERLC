@@ -3,14 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Mecánico ER:LC</title>
+
+    <title>Mecánico ER:LC</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <h1>🔧 Mecánico ER:LC</h1>
+    <header>
+        <h1>🔧 MECÁNICO ER:LC</h1>
+        <p>Calculadora de servicios</p>
+    </header>
 
-    <p>Calculadora de precios</p>
+    <main>
+
+        <section class="calculadora">
+
+            <h2>Servicios</h2>
+
+            <div class="servicio">
+                <span>Reparación</span>
+                <input type="number" id="reparacion" min="0" value="0">
+            </div>
+
+            <div class="servicio">
+                <span>Pintura</span>
+                <input type="number" id="pintura" min="0" value="0">
+            </div>
+
+            <div class="servicio">
+                <span>Neumáticos</span>
+                <input type="number" id="neumaticos" min="0" value="0">
+            </div>
+
+            <div class="servicio">
+                <span>Otros</span>
+                <input type="number" id="otros" min="0" value="0">
+            </div>
+
+            <button onclick="calcular()">CALCULAR TOTAL</button>
+
+            <div class="resultado">
+                <h2>Total</h2>
+                <p id="total">$0</p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Calculadora del Mecánico · ER:LC</p>
+    </footer>
+
+    <script src="script.js"></script>
 
 </body>
 </html>
