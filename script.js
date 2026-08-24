@@ -1,4 +1,3 @@
-// Precios y servicios para ER:LC
 const servicios = {
   Reparaciones: [
     { nombre: 'Reparación de motor', precio: 500 },
@@ -16,7 +15,7 @@ const servicios = {
   ]
 };
 
-let listaPresupuesto = [];
+let presupuesto = [];
 
 document.addEventListener('DOMContentLoaded', () => {
   const selectCategoria = document.querySelectorAll('select')[0];
@@ -25,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnAñadir = document.querySelector('button');
   const btnLimpiar = document.querySelectorAll('button')[1];
 
-  // Cargar servicios según la categoría seleccionada
   function actualizarServicios() {
     const cat = selectCategoria.value;
     selectServicio.innerHTML = '';
@@ -40,6 +38,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function renderizarPresupuesto() {
+    const totalElemento = document.querySelector('.panel:nth-child(2) h2') || document.body;
+    let total = 0;
+
+    presupuesto.forEach(item => {
+      total += item.precio * item.cantidad;
+    });
+
+    // Actualiza el texto del total en pantalla
+    const elementoTotal = Array.from(document.querySelectorAll('*')).find(el => el.textContent.includes('TOTAL'));
+    if (elementoTotal) {
+      elementoTotal.innerHTML = `TOTAL <strong>$${total}</strong>`;
+    }
+  }
+
+  btnAñadir.addEventListener('click', (e) => {
+    e.preventDefault();
+    const cat = selectCategoria.value;
+    const nombreServicio = selectServicio.value;
+    const cantidad = parseInt(inputCantidad.value) || 1;
+
+    const servicioEncontrado = servicios[cat]?.find(s => s.nombre === nombreServicio);
+    
+    if (servicioEncontrado) {
+      presupuesto.push({
+        nombre: servicioEncontrado.nombre,
+        precio: servicioEncontrado.precio,
+        cantidad: cantidad
+      });
+      renderizarPresupuesto();
+    }
+  });
+
+  btnLimpiar.addEventListener('click', (e) => {
+    e.preventDefault();
+    presupuesto = [];
+    renderizarPresupuesto();
+  });
+
   selectCategoria.addEventListener('change', actualizarServicios);
-  actualizarServicios(); // Carga inicial
+  actualizarServicios();
 });
