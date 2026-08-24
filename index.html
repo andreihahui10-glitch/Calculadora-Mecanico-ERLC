@@ -3,97 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MECÁNICO ER:LC - Calculadora</title>
-  <link rel="stylesheet" href="style.css?v=20">
+  <title>MECÁNICO ER:LC</title>
+  <link rel="stylesheet" href="style.css?v=100">
 </head>
 <body>
   <header>
     <h1>🔧 MECÁNICO ER:LC</h1>
-    <p>Calculadora rápida de presupuestos</p>
+    <p>Calculadora de presupuesto</p>
   </header>
 
-  <main class="dashboard">
-    <!-- Columna 1: Reparaciones -->
-    <div class="card card-reparaciones">
-      <h2>🛠️ Reparaciones</h2>
-      <div class="servicios-grid">
-        <div class="item-card">
-          <span>Motor (€800)</span>
-          <button onclick="agregarItem('Reparación de motor', 800)">+ Añadir</button>
+  <main>
+    <div class="panel">
+      <h2>🛠️ Añadir servicio</h2>
+      <div class="form-row">
+        <div class="field">
+          <label>Categoría</label>
+          <select id="categoria">
+            <option value="reparaciones">Reparaciones</option>
+            <option value="modificaciones">Modificaciones</option>
+            <option value="mantenimiento">Mantenimiento</option>
+          </select>
         </div>
-        <div class="item-card">
-          <span>Neumáticos (€300)</span>
-          <button onclick="agregarItem('Cambio de neumáticos', 300)">+ Añadir</button>
+
+        <div class="field">
+          <label>Servicio</label>
+          <select id="servicio"></select>
         </div>
-        <div class="item-card">
-          <span>Carrocería (€450)</span>
-          <button onclick="agregarItem('Reparación de carrocería', 450)">+ Añadir</button>
+
+        <div class="field">
+          <label>Cantidad</label>
+          <input type="number" id="cantidad" value="1" min="1">
         </div>
-        <div class="item-card">
-          <span>Cristales (€250)</span>
-          <button onclick="agregarItem('Cambio de cristal', 250)">+ Añadir</button>
-        </div>
+
+        <button id="btn-add" class="btn btn-add">➕ AÑADIR AL PRESUPUESTO</button>
       </div>
     </div>
 
-    <!-- Columna 2: Modificaciones -->
-    <div class="card card-modificaciones">
-      <h2>🏎️ Modificaciones</h2>
-      <div class="servicios-grid">
-        <div class="item-card">
-          <span>Pintura (€500)</span>
-          <button onclick="agregarItem('Pintura personalizada', 500)">+ Añadir</button>
-        </div>
-        <div class="item-card">
-          <span>Turbo (€2500)</span>
-          <button onclick="agregarItem('Turbo / Rendimiento', 2500)">+ Añadir</button>
-        </div>
-        <div class="item-card">
-          <span>Bodykit (€1800)</span>
-          <button onclick="agregarItem('Kit de carrocería', 1800)">+ Añadir</button>
-        </div>
-        <div class="item-card">
-          <span>Neón / Tintado (€600)</span>
-          <button onclick="agregarItem('Luces Neón', 600)">+ Añadir</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Columna 3: Mantenimiento -->
-    <div class="card card-mantenimiento">
-      <h2>🛢️ Mantenimiento</h2>
-      <div class="servicios-grid">
-        <div class="item-card">
-          <span>Aceite (€150)</span>
-          <button onclick="agregarItem('Cambio de aceite', 150)">+ Añadir</button>
-        </div>
-        <div class="item-card">
-          <span>Frenos (€350)</span>
-          <button onclick="agregarItem('Revisión y frenos', 350)">+ Añadir</button>
-        </div>
-        <div class="item-card">
-          <span>Nitro (€1000)</span>
-          <button onclick="agregarItem('Recarga Nitro', 1000)">+ Añadir</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Panel de Total / Presupuesto -->
-    <div class="card card-total">
-      <h2>📋 Presupuesto Final</h2>
-      <div id="lista-presupuesto" class="recibo">
-        <p class="vacio">Selecciona servicios para añadir al ticket...</p>
+    <div class="panel">
+      <h2>📋 Presupuesto</h2>
+      <div id="lista-servicios" class="lista">
+        <p class="vacio">No hay servicios añadidos.</p>
       </div>
 
-      <div class="total-box">
-        <span>TOTAL:</span>
-        <span id="total-val">€0</span>
-      </div>
-
-      <button class="btn-clear" onclick="limpiarPresupuesto()">🗑️ Limpiar Todo</button>
+      <p class="total-text">TOTAL <strong id="total-val">$0</strong></p>
+      
+      <button id="btn-clear" class="btn btn-clear">🗑️ LIMPIAR PRESUPUESTO</button>
     </div>
   </main>
 
-  <script src="script.js?v=20"></script>
+  <footer>
+    <p>Calculadora del Mecánico · ER:LC</p>
+  </footer>
+
+  <script src="script.js?v=100"></script>
 </body>
 </html>
