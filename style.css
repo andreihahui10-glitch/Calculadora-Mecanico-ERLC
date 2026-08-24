@@ -1,106 +1,44 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+:root {
+  --primary-color: #2563eb;
+  --bg-color: #f8fafc;
+  --card-bg: #ffffff;
+  --text-color: #1e293b;
+  --border-color: #e2e8f0;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background: #111827;
-    color: white;
-    min-height: 100vh;
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 20px;
 }
 
 header {
-    text-align: center;
-    padding: 30px 20px;
-    background: #1f2937;
-    border-bottom: 3px solid #f59e0b;
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 header h1 {
-    font-size: 32px;
-    margin-bottom: 8px;
-}
-
-header p {
-    color: #9ca3af;
+  margin: 0;
+  color: var(--primary-color);
 }
 
 main {
-    display: flex;
-    justify-content: center;
-    padding: 40px 20px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.calculadora {
-    width: 100%;
-    max-width: 600px;
-    background: #1f2937;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+.panel {
+  background: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border-color);
 }
 
-.calculadora h2 {
-    margin-bottom: 20px;
-}
-
-.servicio {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    padding: 15px;
-    background: #374151;
-    border-radius: 10px;
-}
-
-.servicio input {
-    width: 120px;
-    padding: 10px;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-}
-
-button {
-    width: 100%;
-    padding: 15px;
-    margin-top: 15px;
-    border: none;
-    border-radius: 8px;
-    background: #f59e0b;
-    color: #111827;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #d97706;
-}
-
-.resultado {
-    margin-top: 25px;
-    padding: 20px;
-    text-align: center;
-    background: #111827;
-    border-radius: 10px;
-}
-
-.resultado h2 {
-    margin-bottom: 10px;
-}
-
-#total {
-    font-size: 32px;
-    font-weight: bold;
-    color: #f59e0b;
-}
-
-footer {
-    text-align: center;
-    padding: 20px;
-    color: #6b7280;
+h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
 }
