@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Mecánico ER:LC</title>
+    <title>Calculadora Mecánico ER:LC</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -12,50 +12,116 @@
 <body>
 
     <header>
-        <h1>🔧 MECÁNICO ER:LC</h1>
-        <p>Calculadora de servicios</p>
+        <div class="logo">
+            🔧
+        </div>
+
+        <div>
+            <h1>MECÁNICO ER:LC</h1>
+            <p>Calculadora de presupuesto</p>
+        </div>
     </header>
+
 
     <main>
 
-        <section class="calculadora">
+        <!-- SELECCIÓN DE SERVICIOS -->
+        <section class="panel">
 
-            <h2>Servicios</h2>
+            <h2>🛠️ Añadir servicio</h2>
 
-            <div class="servicio">
-                <span>Reparación</span>
-                <input type="number" id="reparacion" min="0" value="0">
+            <div class="formulario">
+
+                <label for="categoria">
+                    Categoría
+                </label>
+
+                <select id="categoria" onchange="cargarServicios()">
+                    <option value="">Selecciona una categoría</option>
+                    <option value="reparaciones">Reparaciones</option>
+                    <option value="pintura">Pintura</option>
+                    <option value="neumaticos">Neumáticos</option>
+                    <option value="otros">Otros</option>
+                </select>
+
+
+                <label for="servicio">
+                    Servicio
+                </label>
+
+                <select id="servicio">
+                    <option value="">
+                        Primero selecciona una categoría
+                    </option>
+                </select>
+
+
+                <label for="cantidad">
+                    Cantidad
+                </label>
+
+                <input
+                    type="number"
+                    id="cantidad"
+                    min="1"
+                    value="1"
+                >
+
+
+                <button onclick="añadirServicio()">
+                    ➕ AÑADIR AL PRESUPUESTO
+                </button>
+
             </div>
 
-            <div class="servicio">
-                <span>Pintura</span>
-                <input type="number" id="pintura" min="0" value="0">
+        </section>
+
+
+        <!-- PRESUPUESTO -->
+        <section class="panel presupuesto">
+
+            <h2>📋 Presupuesto</h2>
+
+            <div id="listaPresupuesto">
+
+                <p class="vacio">
+                    No hay servicios añadidos.
+                </p>
+
             </div>
 
-            <div class="servicio">
-                <span>Neumáticos</span>
-                <input type="number" id="neumaticos" min="0" value="0">
+
+            <div class="total">
+
+                <span>TOTAL</span>
+
+                <strong id="total">
+                    $0
+                </strong>
+
             </div>
 
-            <div class="servicio">
-                <span>Otros</span>
-                <input type="number" id="otros" min="0" value="0">
-            </div>
 
-            <button onclick="calcular()">CALCULAR TOTAL</button>
-
-            <div class="resultado">
-                <h2>Total</h2>
-                <p id="total">$0</p>
-            </div>
+            <button
+                class="boton-limpiar"
+                onclick="limpiarPresupuesto()"
+            >
+                🗑️ LIMPIAR PRESUPUESTO
+            </button>
 
         </section>
 
     </main>
 
+
     <footer>
-        <p>Calculadora del Mecánico · ER:LC</p>
+
+        <p>
+            Calculadora del Mecánico · ER:LC
+        </p>
+
     </footer>
+
 
     <script src="script.js"></script>
 
