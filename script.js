@@ -21,70 +21,68 @@ const servicios = {
 let presupuesto = [];
 
 document.addEventListener('DOMContentLoaded', () => {
-  const selectCategoria = document.querySelectorAll('select')[0];
-  const selectServicio = document.querySelectorAll('select')[1];
-  const inputCantidad = document.querySelector('input[type="number"]');
-  const btnAñadir = document.querySelectorAll('button')[0];
-  const btnLimpiar = document.querySelectorAll('button')[1];
+  const selectCategoria = document.getElementById('select-categoria');
+  const selectServicio = document.getElementById('select-servicio');
+  const inputCantidad = document.getElementById('input-cantidad');
+  const formServicio = document.getElementById('form-servicio');
+  const listaPresupuesto = document.getElementById('lista-presupuesto');
+  const totalMonto = document.getElementById('total-monto');
+  const btnLimpiar = document.getElementById('btn-limpiar');
 
   function actualizarServicios() {
-    const val = (selectCategoria.value || '').toLowerCase().trim();
-    
-    let lista = servicios[val];
-    if (!lista) {
-      const claves = Object.keys(servicios);
-      lista = servicios[claves[selectCategoria.selectedIndex]] || servicios.reparaciones;
-    }
-
+    const cat = selectCategoria.value;
+    const lista = servicios[cat] || [];
     selectServicio.innerHTML = '';
 
     lista.forEach(s => {
       const option = document.createElement('option');
       option.value = s.nombre;
+      option.textContent = `${s.nombre} ($${s.precio})`;
       option.dataset.precio = s.precio;
-      option.textContent = `${s.nombre} - $${s.precio}`;
       selectServicio.appendChild(option);
     });
   }
 
   function renderizarPresupuesto() {
+    listaPresupuesto.innerHTML = '';
     let total = 0;
-    presupuesto.forEach(item => {
-      total += item.precio * item.cantidad;
+
+    if (presupuesto.length === 0) {
+      listaPresupuesto.innerHTML = '<p class="vacio">No hay servicios añadidos aún.</p>';
+      totalMonto.textContent = '$0';
+      return;
+    }
+
+    presupuesto.forEach((item) => {
+      const subtotal = item.precio * item.cantidad;
+      total += subtotal;
+
+      const div = document.createElement('div');
+      div.className = 'item-row';
+      div.innerHTML = `
+        <span>${item.cantidad}x ${item.nombre}</span>
+        <strong>$${subtotal}</strong>
+      `;
+      listaPresupuesto.appendChild(div);
     });
 
-    // Busca un elemento span o p específico o el contenedor del total sin borrar el HTML
-    const contenedorTotal = document.querySelector('.panel:last-child p') || 
-                            document.querySelector('.panel:last-child h2') ||
-                            document.querySelector('.panel:last-child');
-
-    if (contenedorTotal) {
-      // Si existe un elemento con el monto actual, actualizamos solo el número
-      const spanPrecio = contenedorTotal.querySelector('span, strong');
-      if (spanPrecio) {
-        spanPrecio.textContent = `$${total}`;
-      } else {
-        // En caso de no tener etiquetas internas, actualiza el contenido directamente
-        contenedorTotal.innerHTML = `TOTAL <strong>$${total}</strong>`;
-      }
-    }
+    totalMonto.textContent = `$${total}`;
   }
 
-  btnAñadir.addEventListener('click', (e) => {
+  formServicio.addEventListener('submit', (e) => {
     e.preventDefault();
-    const optionSeleccionada = selectServicio.options[selectServicio.selectedIndex];
-    if (!optionSeleccionada) return;
+    const optionSelected = selectServicio.options[selectServicio.selectedIndex];
+    if (!optionSelected) return;
 
-    const nombre = optionSeleccionada.value;
-    const precio = parseFloat(optionSeleccionada.dataset.precio) || 0;
+    const nombre = optionSelected.value;
+    const precio = parseFloat(optionSelected.dataset.precio);
     const cantidad = parseInt(inputCantidad.value) || 1;
 
     presupuesto.push({ nombre, precio, cantidad });
     renderizarPresupuesto();
   });
 
-  btnLimpiar.addEventListener('click', (e) => {
-    e.preventDefault();
+  btnLimpiar.addEventListener('click', () => {
     presupuesto = [];
     renderizarPresupuesto();
   });
